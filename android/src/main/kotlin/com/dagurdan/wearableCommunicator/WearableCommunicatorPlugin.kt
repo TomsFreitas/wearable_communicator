@@ -15,6 +15,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import org.json.JSONObject
 import kotlin.reflect.typeOf
 
+
 /** WearableCommunicatorPlugin */
 public class WearableCommunicatorPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, MessageClient.OnMessageReceivedListener, DataClient.OnDataChangedListener {
   /// The MethodChannel that will the communication between Flutter and native Android
@@ -55,9 +56,9 @@ public class WearableCommunicatorPlugin: FlutterPlugin, MethodCallHandler, Activ
         "getPlatformVersion" -> {
           result.success("Android ${android.os.Build.VERSION.RELEASE}")
         }
-        "sendMessage" -> {
+        /* "sendMessage" -> {
             sendMessage(call, result)
-        }
+        } */
         "setData" -> {
             setData(call, result)
         }
@@ -92,12 +93,12 @@ public class WearableCommunicatorPlugin: FlutterPlugin, MethodCallHandler, Activ
         }
     }
 
-    private fun sendMessage(call: MethodCall, result: Result) {
+    /* private fun sendMessage(call: MethodCall, result: Result) {
         if (activity == null) {
             result.success(null)
         } else {
             try {
-                val argument = call.arguments<HashMap<String, Any>>()
+                val argument = call.arguments<HashMap<Any, Any>>()
                 val client = Wearable.getMessageClient(activity!!)
                 Wearable.getNodeClient(activity!!).connectedNodes.addOnSuccessListener { nodes ->
                     nodes.forEach { node ->
@@ -115,7 +116,7 @@ public class WearableCommunicatorPlugin: FlutterPlugin, MethodCallHandler, Activ
                 Log.d(TAG, "Failed to send message", ex)
             }
         }
-    }
+    } */
 
     private fun setData(call: MethodCall, result: Result) {
         try {

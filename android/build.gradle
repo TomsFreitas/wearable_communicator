@@ -2,7 +2,7 @@ group 'com.dagurdan.wearableCommunicator'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.3.50'
+    ext.kotlin_version = '1.4.32'
     repositories {
         google()
         jcenter()
@@ -41,4 +41,5 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.android.gms:play-services-wearable:17.0.0'
+
 }

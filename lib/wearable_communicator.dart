@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
-
 /// Static class to send messages and data to wearables
 class WearableCommunicator {
-  static const MethodChannel _channel = const MethodChannel('wearableCommunicator');
+  static const MethodChannel _channel =
+      const MethodChannel('wearableCommunicator');
 
   /// send message to watch
   /// the message must conform to https://api.flutter.dev/flutter/services/StandardMessageCodec-class.html
@@ -26,7 +26,6 @@ class WearableCommunicator {
   }
 }
 
-
 /// typedef for listener callbacks
 typedef void MultiUseCallback(dynamic msg);
 
@@ -46,25 +45,26 @@ class WearableListener {
       case 'messageReceived':
         if (call.arguments["args"] is String) {
           try {
-            Map value = json.decode(call.arguments["args"]);
-            _messageCallbacksById[call.arguments["id"]](value);
+            Map? value = json.decode(call.arguments["args"]);
+            _messageCallbacksById[call.arguments["id"]]!(value);
           } catch (Exception) {
-            _messageCallbacksById[call.arguments["id"]](call.arguments["args"]);
+            _messageCallbacksById[call.arguments["id"]]!(
+                call.arguments["args"]);
           }
         } else {
-          _messageCallbacksById[call.arguments["id"]](call.arguments["args"]);
+          _messageCallbacksById[call.arguments["id"]]!(call.arguments["args"]);
         }
         break;
       case 'dataReceived':
         if (call.arguments["args"] is String) {
           try {
-            Map value = json.decode(call.arguments["args"]);
-            _dataCallbacksById[call.arguments["id"]](value);
+            Map? value = json.decode(call.arguments["args"]);
+            _dataCallbacksById[call.arguments["id"]]!(value);
           } catch (Exception) {
-            _dataCallbacksById[call.arguments["id"]](call.arguments["args"]);
+            _dataCallbacksById[call.arguments["id"]]!(call.arguments["args"]);
           }
         } else {
-          _dataCallbacksById[call.arguments["id"]](call.arguments["args"]);
+          _dataCallbacksById[call.arguments["id"]]!(call.arguments["args"]);
         }
 
         break;
@@ -81,10 +81,6 @@ class WearableListener {
     int currentListenerId = _nextCallbackId++;
     _messageCallbacksById[currentListenerId] = callback;
     await _channel.invokeMethod("listenMessages", currentListenerId);
-    return () {
-      _channel.invokeMethod("cancelListeningMessages", currentListenerId);
-      _messageCallbacksById.remove(currentListenerId);
-    };
   }
 
   /// register a function for data layer events
@@ -94,9 +90,5 @@ class WearableListener {
     int currentListenerId = _nextCallbackId++;
     _dataCallbacksById[currentListenerId] = callback;
     await _channel.invokeMethod("listenData", currentListenerId);
-    return () {
-      _channel.invokeMethod("cancelListeningData", currentListenerId);
-      _dataCallbacksById.remove(currentListenerId);
-    };
   }
 }
